@@ -12,7 +12,7 @@ typedef struct {
 char** criarTabuleiro() {
     char** tabuleiro = (char**)malloc(3 * sizeof(char*));  //Aloca memoria para 3 linhas
     for (int i = 0; i < 3; i++) 
-        tabuleiro[i] = (char*)malloc(3 * sizeof(char));  //Aloca memoria para 3 colunas em cada linha
+        tabuleiro[i] = (char*)malloc(3 * sizeof(char)); //Aloca memoria para 3 colunas em cada linha
 
     //inicializa todas as posicoes do tabuleiro com espacos em branco (' ')
     for (int i = 0; i < 3; i++) 
@@ -34,6 +34,7 @@ void exibirTabuleiro(char** tabuleiro) {
         printf("\n");
         if (i < 2) printf("---+---+---\n");  //imprime a linha separadora entre as linhas do tabuleiro
     }
+    printf("\n");
 }
 
 //funcao para verificar se algum jogador venceu
@@ -64,10 +65,18 @@ int tabuleiroCheio(char** tabuleiro) {
 //funÃ§Ã£o para a jogada do jogador
 void jogarJogador(char** tabuleiro, char jogador) {
     int linha, coluna;
+
+    while (1) {
     //solicita ao jogador a posiÃ§Ã£o da linha e coluna onde deseja jogar
     printf("Jogador '%c', insira a linha (0-2) e coluna (0-2): ", jogador);
     scanf("%d %d", &linha, &coluna);
-    tabuleiro[linha][coluna] = jogador;  //coloca a jogada do jogador no tabuleiro
+        if (linha >= 0 && linha < 3 && coluna >= 0 && coluna < 3 && tabuleiro[linha][coluna] == ' ') {
+            tabuleiro[linha][coluna] = jogador; //coloca a jogada do jogador no tabuleiro
+            break;
+        }else{ 
+            printf("A posição está incorreta ou já utilizada pelo jogador O. Tente novamente.\n");
+        }
+    }
 }
 
 //funcao para a jogada do computador (aleatoria)
