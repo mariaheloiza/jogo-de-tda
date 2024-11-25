@@ -12,7 +12,7 @@ typedef struct {
 char** criarTabuleiro() {
     char** tabuleiro = (char**)malloc(3 * sizeof(char*));  //Aloca memoria para 3 linhas
     for (int i = 0; i < 3; i++) 
-        tabuleiro[i] = (char*)malloc(3 * sizeof(char)); //Aloca memoria para 3 colunas em cada linha
+        tabuleiro[i] = (char*)malloc(3 * sizeof(char));  //Aloca memoria para 3 colunas em cada linha
 
     //inicializa todas as posicoes do tabuleiro com espacos em branco (' ')
     for (int i = 0; i < 3; i++) 
@@ -34,55 +34,49 @@ void exibirTabuleiro(char** tabuleiro) {
         printf("\n");
         if (i < 2) printf("---+---+---\n");  //imprime a linha separadora entre as linhas do tabuleiro
     }
-    printf("\n");
 }
 
 //funcao para verificar se algum jogador venceu
-int verificarVencedor(char** tabuleiro, char jogador) {
+int verVencedor(char** tabuleiro, char jogador) {
     //verifica se o jogador fez uma linha - coluna - diagonal completa
     for (int i = 0; i < 3; i++) {
-        //verifica linhas
-        if (tabuleiro[i][0] == jogador && tabuleiro[i][1] == jogador && tabuleiro[i][2] == jogador) return 1;
+        if (tabuleiro[i][0] == jogador && tabuleiro[i][1] == jogador && tabuleiro[i][2] == jogador) 
+            return 1;
         //verifica colunas
-        if (tabuleiro[0][i] == jogador && tabuleiro[1][i] == jogador && tabuleiro[2][i] == jogador) return 1;
+        if (tabuleiro[0][i] == jogador && tabuleiro[1][i] == jogador && tabuleiro[2][i] == jogador) 
+            return 1;
     }
     //verifica diagonais
-    if (tabuleiro[0][0] == jogador && tabuleiro[1][1] == jogador && tabuleiro[2][2] == jogador) return 1;
-    if (tabuleiro[0][2] == jogador && tabuleiro[1][1] == jogador && tabuleiro[2][0] == jogador) return 1;
-
-    return 0;  //retorna 0 se nao houve vencedor
+   if (tabuleiro[0][0] == jogador && tabuleiro[1][1] == jogador && tabuleiro[2][2] == jogador) 
+return 1;
+    if (tabuleiro[0][2] == jogador && tabuleiro[1][1] == jogador && tabuleiro[2][0] == jogador) 
+return 1;
+    return 0;
 }
 
-//funÃ§Ã£o para verificar se o tabuleiro estÃ¡ cheio (empate)
+//função para verificar se o tabuleiro está cheio (empate)
 int tabuleiroCheio(char** tabuleiro) {
-    //verifica se todas as posiÃ§Ãµes do tabuleiro estÃ£o preenchidas
+    //verifica se todas as posições do tabuleiro estão preenchidas
     for (int i = 0; i < 3; i++) 
         for (int j = 0; j < 3; j++) 
-            if (tabuleiro[i][j] == ' ') return 0;  //se houver espaÃ§o vazio, retorna 0
+            if (tabuleiro[i][j] == ' ') 
+                return 0;  //se houver espaço vazio, retorna 0
     return 1;  //retorna 1 se o tabuleiro estiver cheio
 }
 
-//funÃ§Ã£o para a jogada do jogador
+//função para a jogada do jogador
 void jogarJogador(char** tabuleiro, char jogador) {
     int linha, coluna;
-
-    while (1) {
-    //solicita ao jogador a posiÃ§Ã£o da linha e coluna onde deseja jogar
-    printf("Jogador '%c', insira a linha (0-2) e coluna (0-2): ", jogador);
+    //solicita ao jogador a posição da linha e coluna onde deseja jogar
+    printf("jogador '%c', informe a linha (0-2) e informe a coluna (0-2): ", jogador);
     scanf("%d %d", &linha, &coluna);
-        if (linha >= 0 && linha < 3 && coluna >= 0 && coluna < 3 && tabuleiro[linha][coluna] == ' ') {
-            tabuleiro[linha][coluna] = jogador; //coloca a jogada do jogador no tabuleiro
-            break;
-        }else{ 
-            printf("A posição está incorreta ou já utilizada pelo jogador O. Tente novamente.\n");
-        }
-    }
+    tabuleiro[linha][coluna] = jogador;  //coloca a jogada do jogador no tabuleiro
 }
 
 //funcao para a jogada do computador (aleatoria)
 void jogarComputador(char** tabuleiro) {
     int linha, coluna;
-    //gera nÃºmeros aleatÃ³rios para a jogada do computador
+    //gera números aleatórios para a jogada do computador
     linha = rand() % 3;  //gera uma linha aleatoria entre 0 e 2
     coluna = rand() % 3;  //gera uma coluna aleatoria entre 0 e 2
 
@@ -95,28 +89,28 @@ void jogarComputador(char** tabuleiro) {
     tabuleiro[linha][coluna] = 'O';  //coloca a jogada do computador no tabuleiro
 }
 
-//funÃ§Ã£o para salvar o ranking do jogador em um arquivo
+//função para salvar o ranking do jogador em um arquivo
 void salvarRanking(Jogador jogador) {
-    FILE* arquivo = fopen("ranking.txt", "a");  //abre o arquivo para adicionar informaÃ§Ãµes
+    FILE* arquivo = fopen("ranking.txt", "a");  //abre o arquivo para adicionar informações
     if (arquivo) {
-        fprintf(arquivo, "%s %d\n", jogador.nome, jogador.vitorias);  //salva o nome e vitÃ³rias do jogador
+        fprintf(arquivo, "%s %d\n", jogador.nome, jogador.vitorias);  //salva o nome e vitórias do jogador
         fclose(arquivo);  //fecha o arquivo
     }
 }
 
-//funÃ§Ã£o para exibir o ranking
+//função para exibir o ranking
 void exibirRanking() {
     FILE* arquivo = fopen("ranking.txt", "r");  //abre o arquivo de ranking para leitura
     if (arquivo) {
         char nome[50];
         int vitorias;
-        //le e exibe as vitÃ³rias de todos os jogadores registrados no arquivo
+        //le e exibe as vitórias de todos os jogadores registrados no arquivo
         while (fscanf(arquivo, "%s %d", nome, &vitorias) != EOF) {
             printf("%s - %d vitorias\n", nome, vitorias);
         }
         fclose(arquivo);  //fecha o arquivo
     } else {
-        printf("Nao possui ranking registrado.\n");  //caso nÃ£o haja arquivo de ranking
+        printf("Nao possui ranking registrado.\n");  //caso não haja arquivo de ranking
     }
 }
 
@@ -127,7 +121,7 @@ void mostrarMenu() {
 
 //funcao para exibir os creditos
 void exibirCreditos() {
-    printf("\nDesenvolvido por: Leonardo, Heloisa e Zafnny\n");
+    printf("\nDesenvolvido: Leonardo, Heloisa e Ari\n");
 }
 
 //funcao principal
@@ -137,12 +131,12 @@ int main() {
     printf("Digite seu nome: ");
     scanf("%s", jogador.nome);  //Le o nome do jogador
 
-    srand(time(NULL));  //inicializa o gerador de nÃºmeros aleatÃ³rios (agora fora do laÃ§o de jogo)
+    srand(time(NULL));  //inicializa o gerador de números aleatórios (agora fora do laço de jogo)
 
     while (1) {
         mostrarMenu();  //exibe o menu de opcoes
         printf("Escolha uma opcao: ");
-        scanf("%d", &opcao);  //Le a opÃ§Ã£o escolhida
+        scanf("%d", &opcao);  //Le a opção escolhida
 
         switch (opcao) {
             case 1: {
@@ -157,7 +151,7 @@ int main() {
                     else 
                         jogarComputador(tabuleiro);  //jogada do computador
 
-                    if (verificarVencedor(tabuleiro, jogadorAtual)) {  //verifica se alguem venceu
+                    if (verVencedor(tabuleiro, jogadorAtual)) {  //verifica se alguem venceu
                         exibirTabuleiro(tabuleiro);
                         printf("Jogador '%c' venceu!\n", jogadorAtual);
                         if (jogadorAtual == 'X') jogador.vitorias++;  //atualiza as vitorias do jogador
@@ -174,9 +168,12 @@ int main() {
                 salvarRanking(jogador);  //salva o ranking do jogador
                 break;
             }
-            case 2: exibirRanking(); break;  //exibe o ranking
-            case 3: exibirCreditos(); break;  //exibe os creditos
-            case 4: return 0;  //sai do programa
+            case 2: exibirRanking(); 
+                break;  //exibe o ranking
+            case 3: exibirCreditos(); 
+                break;  //exibe os creditos
+            case 4: 
+                return 0;  //sai do programa
             default: printf("Opcao invalida tente novamente.\n");  //caso a opcao nao seja valida
         }
     }
